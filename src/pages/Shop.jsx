@@ -1,9 +1,17 @@
+import { useEffect } from "react";
 import Product from "../components/Product"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { setProducts } from '../redux/productSlice';
+import { Products } from '../assets/mockData';
+
 
 const Shop = () => {
 
     const products = useSelector(state=>state.product.products);
+    const dispatch = useDispatch();
+    useEffect(()=>{
+      dispatch(setProducts(Products));
+    },[])
 
   return (
     <div className='mx-auto py-12'>
