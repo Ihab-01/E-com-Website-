@@ -30,7 +30,8 @@ const Navbar = () => {
               {cart.totalQuantity}
             </span>}
           </Link>
-          <button className="text-xl">
+          <button className="text-xl"
+          >
             <FaUser />
           </button>
         </div>

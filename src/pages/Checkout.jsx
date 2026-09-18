@@ -1,12 +1,30 @@
 import { useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
-const Checkout = () => {
+const Checkout = ({setOrder}) => {
     const [billingToggle, setBillingToggle] = useState(true);
     const [shippingToggle, setShippingToggle] = useState(false);
     const [paymentToggle, setPaymentToggle] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('cash on delivery');
+    const [shippingInfo, setShippingInfo] = useState({
+        address: '',
+        city: '',
+        zip: '',
+    })
+
+    const navigate = useNavigate();
+    const handleOrder = ()=>{
+        const newOrder = {
+            products: cart.products,
+            orderNumber: Date.now(),
+            shippingInformation: shippingInfo,
+            totalPrice: cart.totalPrice,
+        }
+        setOrder(newOrder);
+        navigate('/order-confirmation');
+    }
 
     const cart = useSelector(state => state.cart);
 
@@ -53,18 +71,21 @@ const Checkout = () => {
                                 <label className="block text-gray-700">Address</label>
                                 <input type="text" name="adress"
                                 placeholder="Enter your adress"
+                                onChange={(e)=>setShippingInfo({...shippingInfo, address: e.target.value})}
                                 className="w-full px-3 py-2 border rounded"/>
                             </div>
                             <div>
                                 <label className="block text-gray-700">City</label>
                                 <input type="text" name="city"
                                 placeholder="Enter your city"
+                                onChange={(e)=>setShippingInfo({...shippingInfo, city: e.target.value})}
                                 className="w-full px-3 py-2 border rounded"/>
                             </div>
                             <div>
                                 <label className="block text-gray-700">Zip code</label>
                                 <input type="text" name="zip code"
                                 placeholder="Enter your zip code"
+                                onChange={(e)=>setShippingInfo({...shippingInfo, zip: e.target.value})}
                                 className="w-full px-3 py-2 border rounded"/>
                             </div>
                         </div>
@@ -149,7 +170,8 @@ const Checkout = () => {
                             <span>${cart?.totalPrice?.toFixed(2) || '0.00'}</span>
                         </div>
                     </div>
-                    <button className="w-full bg-red-600 text-white py-2 mt-6 rounded hover:bg-red-800 cursor-pointer transition">
+                    <button onClick={handleOrder}
+                    className="w-full bg-red-600 text-white py-2 mt-6 rounded hover:bg-red-800 cursor-pointer transition">
                         Place order
                     </button>
                 </div>
