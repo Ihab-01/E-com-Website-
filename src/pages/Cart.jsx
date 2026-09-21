@@ -3,6 +3,7 @@ import emptyCart from '../assets/images/emptyCart.jpg'
 import { FaTrashAlt } from 'react-icons/fa';
 import { useState } from 'react';
 import Modal from '../components/Modal';
+import ChangeAdress from '../components/ChangeAdress';
 import { removeFromCart, increaseQuantity, decreaseQuantity } from '../redux/cartSlice';
 import { useNavigate } from 'react-router-dom';
 
@@ -55,7 +56,7 @@ const Cart = () => {
                                         <FaTrashAlt />
                                     </button>
                                 </div>
-                            </div>
+                        </div>
                     ))}
                 </div>
                 <div className='md:w-1/3 bg-white p-6 rounded-lg shadow-md border'>
@@ -79,7 +80,9 @@ const Cart = () => {
                     onClick={()=> navigate('/checkout')}>Proceed to checkout</button>
                 </div>
             </div>
-            <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} address={address} setAdress={setAdress}/>
+            <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
+                <ChangeAdress setIsModalOpen={setIsModalOpen} address={address} setAdress={setAdress} />
+            </Modal>
         </div>)
         :
         (<div className='flex justify-center mt-2'>

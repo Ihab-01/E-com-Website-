@@ -1,7 +1,6 @@
 import { useState } from "react"
 
 const ChangeAdress = ({setIsModalOpen ,address ,setAdress}) => {
-    
     const [newAdress, setNewAdress] = useState(address);
     const handleAdress = ()=>{
         setAdress(newAdress);

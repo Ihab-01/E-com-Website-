@@ -1,10 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-    products: [],
-    totalQuantity: 0,
-    totalPrice: 0,
-}
+// Function to load the saved cart from localStorage
+const loadCartFromStorage = () => {
+    try {
+        const serializedState = localStorage.getItem('cartState');
+        if (serializedState === null) {
+            return { products: [], totalQuantity: 0, totalPrice: 0 };
+        }
+        return JSON.parse(serializedState);
+    } catch (err) {
+        return { products: [], totalQuantity: 0, totalPrice: 0 };
+    }
+};
+
+// Function to save the cart to localStorage
+const saveCartToStorage = (state) => {
+    try {
+        const serializedState = JSON.stringify(state);
+        localStorage.setItem('cartState', serializedState);
+    } catch (err) {
+        // Ignore write errors
+    }
+};
+
+const initialState = loadCartFromStorage();
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -28,6 +47,7 @@ const cartSlice = createSlice({
             }
             state.totalPrice += newItem.price;
             state.totalQuantity++;
+            saveCartToStorage(state); // Save immediately after change
         },
         removeFromCart(state, action){
             const newId = action.payload;
@@ -36,6 +56,7 @@ const cartSlice = createSlice({
                 state.totalPrice -= findItem.totalPrice;
                 state.totalQuantity -= findItem.quantity;
                 state.products = state.products.filter(item => item.id !== newId);
+                saveCartToStorage(state);
             }
         },
         increaseQuantity(state, action){
@@ -46,16 +67,24 @@ const cartSlice = createSlice({
                 findItem.totalPrice += findItem.price;
                 state.totalQuantity ++;
                 state.totalPrice += findItem.price;
+                saveCartToStorage(state);
             }
         },
         decreaseQuantity(state, action){
             const newId = action.payload;
             const findItem = state.products.find((item)=> item.id === newId);
-            if(findItem && findItem.quantity > 1){
-                findItem.quantity --;
-                findItem.totalPrice -= findItem.price;
-                state.totalQuantity --;
-                state.totalPrice -= findItem.price;
+            if(findItem){
+                if(findItem.quantity > 1){
+                    findItem.quantity --;
+                    findItem.totalPrice -= findItem.price;
+                    state.totalQuantity --;
+                    state.totalPrice -= findItem.price;
+                } else {
+                    state.totalPrice -= findItem.totalPrice;
+                    state.totalQuantity -= findItem.quantity;
+                    state.products = state.products.filter(item => item.id !== newId);
+                }
+                saveCartToStorage(state);
             }
         }
     },

@@ -1,10 +1,27 @@
 import { Link } from "react-router-dom";
 import { FaSearch, FaShoppingCart, FaUser } from 'react-icons/fa';
 import { useSelector } from "react-redux";
+import Modal from "./Modal";
+import Login from "./login";
+import Register from "./register";
+import { useState } from "react";
 
 const Navbar = () => {
 
   const cart = useSelector(state => state.cart);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+
+  const openSignUp = () =>{
+    setIsLogin(false);
+    setIsModalOpen(true);
+  }
+  
+  const openLogin = () =>{
+    setIsLogin(true);
+    setIsModalOpen(true);
+  } 
 
   return (
     <nav className="bg-white shadow-md">
@@ -16,7 +33,8 @@ const Navbar = () => {
           <form>
             <input type="text" placeholder="search product..."
             className="w-full border rounded-[10px] py-2 px-4"/>
-            <button className="absolute top-3 right-3 text-red-500">
+            <button className="absolute top-3 right-3 text-red-500 cursor-pointer"
+            onClick={()=> setIsModalOpen(true)}>
               <FaSearch/>
             </button>
           </form>
@@ -30,8 +48,8 @@ const Navbar = () => {
               {cart.totalQuantity}
             </span>}
           </Link>
-          <button className="text-xl"
-          >
+          <button className="text-xl cursor-pointer"
+          onClick={()=>setIsModalOpen(true)}>
             <FaUser />
           </button>
         </div>
@@ -42,6 +60,9 @@ const Navbar = () => {
         <Link to='/contact' className="hover:underline">Contact</Link>
         <Link to='/about' className="hover:underline">About</Link>
       </div>
+      <Modal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
+        {isLogin ? <Login openSignUp={openSignUp}/> : <Register openLogin={openLogin}/>}
+      </Modal>
     </nav>
   )
 }
