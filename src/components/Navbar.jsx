@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaShoppingCart, FaUser } from 'react-icons/fa';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "./Modal";
 import Login from "./login";
 import Register from "./register";
 import { useState } from "react";
+import { setSearchTerm } from "../redux/productSlice";
 
 const Navbar = () => {
 
@@ -12,6 +13,9 @@ const Navbar = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+  const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const openSignUp = () =>{
     setIsLogin(false);
@@ -23,6 +27,16 @@ const Navbar = () => {
     setIsModalOpen(true);
   } 
 
+  const handleSearch = (e)=>{
+    if (search === ''){
+      return;
+    }else{
+      e.preventDefault();
+      dispatch(setSearchTerm(search));
+      navigate('/filtered-data');
+    }
+  }
+
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4 md:px-16 lg:px-24 pt-4 pb-2 flex justify-between items-center">
@@ -30,11 +44,11 @@ const Navbar = () => {
           <Link to='/'>e-SHOP</Link>
         </div>
         <div className='relative flex-1 mx-6'>
-          <form>
+          <form onSubmit={handleSearch}>
             <input type="text" placeholder="search product..."
-            className="w-full border rounded-[10px] py-2 px-4"/>
-            <button className="absolute top-3 right-3 text-red-500 cursor-pointer"
-            onClick={()=> setIsModalOpen(true)}>
+            className="w-full border rounded-[10px] py-2 px-4"
+            onChange={(e)=> setSearch(e.target.value)}/>
+            <button type="submit" className="absolute top-3 right-3 text-red-500 cursor-pointer">
               <FaSearch/>
             </button>
           </form>
