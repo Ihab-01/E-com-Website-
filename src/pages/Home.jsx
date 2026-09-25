@@ -7,9 +7,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react';
 import Product from '../components/Product';
 import Shop from './Shop';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector(state => state.product.products);
   useEffect(()=>{
@@ -38,7 +40,8 @@ const Home = () => {
             <p className='mb-4 font-bold'>e-SHOP</p>
             <h2 className='text-4xl font-bold'>Welcome to e-SHOP</h2>
             <button className='bg-red-700 px-8 py-1.5 text-white mt-4 cursor-pointer rounded-md font-bold
-            hover:bg-red-700 transfom transition-transform duration-300 hover:scale-105'>SHOP NOW</button>
+            hover:bg-red-700 transfom transition-transform duration-300 hover:scale-105'
+            onClick={()=>navigate('/shop')}>SHOP NOW</button>
           </div>
         </div>
       </div>

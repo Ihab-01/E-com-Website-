@@ -8,6 +8,7 @@ import Checkout from './pages/Checkout';
 import { useState } from 'react';
 import OrderConfirmation from './pages/OrderConfirmation';
 import FilteredData from './pages/FilteredData';
+import Contact from './pages/Contact';
 
 const App = () => {
 
@@ -23,6 +24,7 @@ const App = () => {
         <Route path='/checkout' element={<Checkout setOrder={setOrder}/>}></Route>
         <Route path='/order-confirmation' element={<OrderConfirmation order={order}/>}></Route>
         <Route path='/filtered-data' element={<FilteredData/>}></Route>
+        <Route path='/contact' element={<Contact/>}></Route>
       </Routes>
       <Footer />
     </BrowserRouter>
